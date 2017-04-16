@@ -1,0 +1,11 @@
+{
+  "skip_files": [
+    "lib/hooks.ex",
+    "test/support",
+    "lib/web_app/web/endpoint.ex",
+    "lib/web_app/web/web.ex",
+    "lib/web_app/web/router.ex",
+    "lib/web_app/web/views/error_helpers.ex"
+  ]
+}
+

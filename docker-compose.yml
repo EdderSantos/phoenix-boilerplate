@@ -1,0 +1,26 @@
+version: '3'
+services:
+  web:
+    image: alvarolizama/phoenix
+    ports:
+      - "80:4000"
+    volumes:
+      - ./src:/app
+      - ./scripts:/scripts
+    depends_on:
+      - postgres
+    environment:
+      - MIX_ENV=${MIX_ENV:-dev}
+      - PORT=4000
+      - HOST=localhost
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=web_app_${MIX_ENV:-dev}
+      - DB_USERNAME=postgres
+    env_file:
+      - web-secrets.env
+    working_dir: /app
+    command: mix phx.server
+
+  postgres:
+    image: postgres
