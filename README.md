@@ -104,9 +104,12 @@ chmod +x .git/hooks/pre-commit
 - make logs.pg
 - make shell.web
 - make shell.pg
+- make shell.test
 - make credo
 - make test
 - make coverage
+- make setup
+- make npm.install
 
 ## Make a deployment
 

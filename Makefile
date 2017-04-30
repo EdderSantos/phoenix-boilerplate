@@ -29,19 +29,24 @@ shell.web:
 shell.db:
 		docker-compose exec postgres sh
 
+shell.test:
+		MIX_ENV=test docker-compose run --rm web sh
+
+seed:
+		docker-compose run --rm web sh -c "mix run priv/repo/seeds.exs"
 
 ##################################################################
 #### Testing Commands
 ##################################################################
 
 credo:
-		MIX_ENV=test docker-compose exec web sh -c "mix credo"
+		MIX_ENV=test docker-compose run --rm web sh -c "mix credo"
 
 test:
-		MIX_ENV=test docker-compose exec web sh -c "MIX_ENV=test mix test"
+		MIX_ENV=test docker-compose run --rm web sh -c "mix test"
 
 coverage:
-		MIX_ENV=test docker-compose exec web sh -c "MIX_ENV=test mix coveralls"
+		MIX_ENV=test docker-compose run --rm web sh -c "mix coveralls"
 
 ##################################################################
 #### Build and Deployment Commands
@@ -49,16 +54,18 @@ coverage:
 
 bootstrap:
 		touch web-secrets.env
-		make build setenv
+		make setup setenv npm.install
 
 setenv:
 		echo "DB_PASSWORD=postgres" >> web-secrets.env
 		echo "SECRET_KEY_BASE=" >> web-secrets.env
 
-build:
+npm.install:
+		docker-compose run --rm web sh -c "npm --prefix /app/assets install"
+
+setup:
 		docker-compose run --rm web sh -c "mix deps.get \
 		&& mix deps.clean --unused \
-		&& npm --prefix /app/assets install \
 		&& mix ecto.setup"
 
 release:
